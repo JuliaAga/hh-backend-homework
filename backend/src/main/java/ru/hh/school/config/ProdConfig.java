@@ -1,6 +1,7 @@
 package ru.hh.school.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import ru.hh.nab.common.properties.FileSettings;
@@ -12,10 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @Import({NabHibernateProdConfig.class, NabProdConfig.class, CommonConfig.class})
+@ComponentScan("ru.hh.school")
 public class ProdConfig {
 
-  @Bean
-  public DataSource dataSource(DataSourceFactory dataSourceFactory, FileSettings fileSettings) {
-    return dataSourceFactory.create("master", false, fileSettings);
-  }
 }
