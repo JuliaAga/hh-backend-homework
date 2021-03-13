@@ -1,11 +1,20 @@
-package ru.hh.school.dto;
+package ru.hh.school.dto.hhResponse;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AreaDto {
+class EmplDto {
     private Integer id;
     private String name;
+
+    public EmplDto(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public EmplDto() {
+    }
 
     public Integer getId() {
         return id;
@@ -21,13 +30,5 @@ public class AreaDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public AreaDto(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public AreaDto() {
     }
 }

@@ -28,9 +28,9 @@ public class EmployerDao {
   public List<Employer> getAll(Integer page, Integer per_page) {
     Session session = getSession();
     return session
-            .createQuery("SELECT f FROM Employer f WHERE id = :id order by id limit :per_page offset :offset", Employer.class)
-            .setParameter("per_page", per_page)
-            .setParameter("offset", page * per_page)
+            .createQuery("SELECT f FROM Employer f order by id", Employer.class)
+            .setFirstResult(page * per_page)
+            .setMaxResults(per_page)
             .list();
 
   }
