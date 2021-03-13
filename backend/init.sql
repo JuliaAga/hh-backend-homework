@@ -20,6 +20,14 @@ CREATE TABLE IF NOT EXISTS fav_employers (
 	foreign key (area) references area(id)
 );
 
+CREATE TABLE IF NOT EXISTS salary (
+    id serial PRIMARY KEY,
+    sal_to INTEGER,
+    sal_from INTEGER,
+    currency VARCHAR(5),
+    gross BOOLEAN
+);
+
 CREATE TABLE IF NOT EXISTS fav_vacancies (
     id SERIAL PRIMARY KEY,
     hh_id BIGINT NOT NULL,
@@ -37,13 +45,7 @@ CREATE TABLE IF NOT EXISTS fav_vacancies (
 	foreign key (salary) references salary(id)
 );
 
-CREATE TABLE IF NOT EXISTS salary (
-    id serial PRIMARY KEY,
-    sal_to INTEGER,
-    sal_from INTEGER,
-    currency VARCHAR(5),
-    gross BOOLEAN
-);
+
 
 insert into area (id, hh_id, name) values
 (1, 3565989, 'Ekat'),

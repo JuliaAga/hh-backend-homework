@@ -1,15 +1,15 @@
 package ru.hh.school.dto.request;
 
 public class EmployerRequestDto {
-    private Long employer_id;
+    private Integer employer_id;
     private String comment;
 
 
-    public Long getEmployer_id() {
+    public Integer getEmployer_id() {
         return employer_id;
     }
 
-    public void setEmployer_id(Long employer_id) {
+    public void setEmployer_id(Integer employer_id) {
         this.employer_id = employer_id;
     }
 

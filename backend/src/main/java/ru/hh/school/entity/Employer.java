@@ -1,12 +1,10 @@
 package ru.hh.school.entity;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @javax.persistence.Entity
@@ -17,7 +15,7 @@ public class Employer {
     private Long id;
 
     @Column(name = "hh_id")
-    private Long hhId;
+    private Integer hhId;
 
     private String name;
     private String description;
@@ -27,7 +25,8 @@ public class Employer {
     private Area area;
 
     String comment;
-    LocalDateTime date_create;
+    LocalDate date_create;
+    @Embedded
     Popularity popularity;
     Integer views_count;
 
@@ -39,11 +38,11 @@ public class Employer {
         this.comment = comment;
     }
 
-    public LocalDateTime getDate_create() {
+    public LocalDate getDate_create() {
         return date_create;
     }
 
-    public void setDate_create(LocalDateTime date_create) {
+    public void setDate_create(LocalDate date_create) {
         this.date_create = date_create;
     }
 
@@ -93,6 +92,14 @@ public class Employer {
 
     public void setArea(Area area) {
         this.area = area;
+    }
+
+    public Integer getHhId() {
+        return hhId;
+    }
+
+    public void setHhId(Integer hhId) {
+        this.hhId = hhId;
     }
 
     @Override

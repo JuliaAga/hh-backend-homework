@@ -9,12 +9,7 @@ import ru.hh.school.entity.Employer;
 import ru.hh.school.service.EmployerService;
 
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import java.util.List;
@@ -32,11 +27,9 @@ public class FavEmployerResource {
     @GET
     @Path("/employer")
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Employer> getAll(@QueryParam("page") Integer page,
-                                 @QueryParam("per_page") Integer per_page)
-    {
-        if (page == null) page = 0;
-        if (per_page == null) per_page = 20;
+    public List<Employer> getAll(@QueryParam("page") @DefaultValue("0") Integer page,
+                                 @QueryParam("per_page") @DefaultValue("20") Integer per_page)
+    {//TODO передалать ответ в пагинацию
         return employerService.getAll(page, per_page);
 
     }

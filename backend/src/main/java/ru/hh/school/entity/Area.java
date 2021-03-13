@@ -8,26 +8,34 @@ import javax.persistence.Entity;
 public class Area {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    protected Integer id;
 
     @Column(name = "hh_id")
-    private Long hhId;
+    private Integer hhId;
 
     private String name;
 
-    public Long getId() {
+    public Area() {
+    }
+
+    public Area(Integer hhId, String name) {
+        this.hhId = hhId;
+        this.name = name;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getHhId() {
+    public Integer getHhId() {
         return hhId;
     }
 
-    public void setHhId(Long hhId) {
+    public void setHhId(Integer hhId) {
         this.hhId = hhId;
     }
 

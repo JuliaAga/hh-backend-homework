@@ -1,16 +1,23 @@
 ###from hh
 ##employer
-http://localhost:8080/employer
+GET: http://localhost:8080/employer
 
-http://localhost:8080/employer?query=magazine
+GET: http://localhost:8080/employer?query=magazine
 
-http://localhost:8080/employer?query=magazine&page=2
+GET: http://localhost:8080/employer?query=magazine&page=2
 
-http://localhost:8080/employer/4849846
+GET: http://localhost:8080/employer/4849846
 
 ##vacancies
-http://localhost:8080/vacancy
+GET: http://localhost:8080/vacancy
 
-http://localhost:8080/vacancy?query=driver&per_page=1
+GET: http://localhost:8080/vacancy?query=driver&per_page=1
 
-http://localhost:8080/vacancy/40918585
+GET: http://localhost:8080/vacancy/40918585
+
+###favorites
+GET: http://localhost:8080/favorites/employer
+
+POST
+curl --header "Content-Type: application/json" --data "{\"employer_id\":4849846,\"comment\":\"test\"}" http://localhost:8080/favorites/employer
+
