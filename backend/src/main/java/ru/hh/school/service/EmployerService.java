@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.hh.nab.common.properties.FileSettings;
 import ru.hh.school.dao.AreaDao;
 import ru.hh.school.dao.EmployerDao;
+import ru.hh.school.dto.EmployerDto;
 import ru.hh.school.dto.hhResponse.EmployerResponseDto;
 import ru.hh.school.dto.request.EmployerRequestDto;
 import ru.hh.school.entity.Area;
@@ -36,19 +37,21 @@ public class EmployerService {
     }
 
     @Transactional
-    public Employer get(Long id) {
-        return employerDao.get(id);
+    public Employer getByHhId(Integer id) {
+        return employerDao.getByHhId(id);
     }
 
+
     @Transactional
-    public List<Employer> getAll(Integer page, Integer per_page) {
+    public EmployerDto getAll(Integer page, Integer per_page) {
         List<Employer> employerList = employerDao.getAll(page, per_page);
         employerList.forEach(empl -> {
             increaseCounterOfView(empl);
             if (empl.getViews_count() + 1 == limitOfView)
+                //TODO получается если в настройках увеличить границу то кто-то останется незаконно популярным
                 setPopularityPopular(empl);
         });
-        return employerList;
+        return new EmployerDto(employerList, per_page, page);
     }
 
     @Transactional
@@ -61,39 +64,62 @@ public class EmployerService {
         employerDao.setPopularityPopular(employer.getId());
     }
 
-    //TODO
     @Transactional
     public Employer save(EmployerRequestDto dto) {
 
-        EmployerResponseDto employerResponseDto = hhEmployerService.get(dto.getEmployer_id());
+        Employer empl = getEmployerFromHh(dto.getEmployer_id());
 
-        //TODO вынести в отдельный сервис?
+        empl.setComment(dto.getComment());
+        empl.setViews_count(0);
+        empl.setDate_create(LocalDate.now());
+        empl.setPopularity(Popularity.REGULAR);
+
+        areaDao.saveOrUpdate(empl.getArea());
+        return employerDao.save(empl);
+    }
+
+    @Transactional
+    public void refresh(Integer id) {
+
+        Employer emplHH = getEmployerFromHh(id);
+
+        Employer emplDb = getByHhId(id);
+
+        if (!emplHH.equals(emplDb)){
+            emplDb.setName(emplHH.getName());
+            emplDb.setDescription(emplHH.getDescription());
+            emplDb.setArea(emplHH.getArea());
+
+            areaDao.saveOrUpdate(emplHH.getArea());
+            employerDao.save(emplDb);
+        }
+
+    }
+
+    public Employer getEmployerFromHh(Integer id) {
+        EmployerResponseDto employerResponseDto = hhEmployerService.get(id);
+
         Area area = AreaMapper.areaDtoToArea(employerResponseDto.getArea());
-        areaDao.saveOrUpdate(area);
         Employer employer = new Employer();
 
-        employer.setHhId(dto.getEmployer_id());
-        employer.setComment(dto.getComment());
+        employer.setHhId(id);
 
         employer.setArea(area);
         employer.setName(employerResponseDto.getName());
         employer.setDescription(employerResponseDto.getDescription());
 
-        //TODO А ЕСЛИ ОН УЖЕ БЫЛ В БАЗЕ?
-        employer.setViews_count(0);
-        employer.setDate_create(LocalDate.now());
-        employer.setPopularity(Popularity.REGULAR);
-        return  employerDao.save(employer);
+        return employer;
     }
 
-    //TODO
+
     @Transactional
-    public Employer refresh(Employer employer) {
-        //todo по ID получить от хх
-        //todo обновить поля
-        //todo сохранить в бд
-        //todo вернуть созданный объект
-        return new Employer();
+    public void setComment(Integer id, String comment) {
+        employerDao.setComment(id, comment);
+    }
+
+    @Transactional
+    public void delete(Integer id) {
+        employerDao.delete(id);
     }
 
   /*  @Transactional

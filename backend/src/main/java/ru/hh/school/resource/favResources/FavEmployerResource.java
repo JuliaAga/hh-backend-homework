@@ -11,6 +11,7 @@ import ru.hh.school.service.EmployerService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import java.util.List;
 
@@ -27,29 +28,61 @@ public class FavEmployerResource {
     @GET
     @Path("/employer")
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Employer> getAll(@QueryParam("page") @DefaultValue("0") Integer page,
-                                 @QueryParam("per_page") @DefaultValue("20") Integer per_page)
-    {//TODO передалать ответ в пагинацию
-        return employerService.getAll(page, per_page);
-
+    public Response getAll(@QueryParam("page") @DefaultValue("0") Integer page,
+                           @QueryParam("per_page") @DefaultValue("20") Integer per_page) {
+        return Response.ok(employerService.getAll(page, per_page)).build();
     }
+
     @POST
     @Path("/employer")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Employer save(EmployerRequestDto dto) {
+    public Response save(EmployerRequestDto dto) {
         try {
-            return employerService.save(dto);
+            return Response.ok(employerService.save(dto)).build();
         } catch (Exception ex) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Operation failed", ex);
         }
     }
 
-    //PUT /favorites/employer/{employer_id}
+    @PUT
+    @Path("/employer/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setComment(@PathParam("id") Integer id, String comment) {
+        try {
+            employerService.setComment(id, comment);
+            return Response.ok().build();
+        } catch (Exception ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Operation failed", ex);
+        }
+    }
 
-    //POST /favorites/employer/{employer_id}/refresh
+    @POST
+    @Path("/employer/{id}/refresh")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response refresh(@PathParam("id") Integer id) {
+        try {
+            employerService.refresh(id);
+            return Response.ok().build();
+        } catch (Exception ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Operation failed", ex);
+        }
+    }
 
-    //DELETE /favorites/employer/{employer_id}
+    @DELETE
+    @Path("/employer/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response delete(@PathParam("id") Integer id) {
+        try {
+            employerService.delete(id);
+            return Response.ok().build();
+        } catch (Exception ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Operation failed", ex);
+        }
+    }
 
 
 

@@ -2,6 +2,7 @@ package ru.hh.school.entity;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.util.Objects;
 
 @Entity
 @Table(name = "area")
@@ -45,5 +46,19 @@ public class Area {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Area area = (Area) o;
+        return hhId.equals(area.hhId) &&
+                name.equals(area.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hhId, name);
     }
 }

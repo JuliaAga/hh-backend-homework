@@ -16,10 +16,10 @@ public class EmployerDao {
     this.sessionFactory =  sessionFactory;
   }
 
-  public Employer get(Long id) {
+  public Employer getByHhId(Integer id) {
     Session session = getSession();
     Employer employer = session
-            .createQuery("SELECT f FROM Employer f WHERE id = :id", Employer.class)
+            .createQuery("SELECT f FROM Employer f WHERE hh_id = :id", Employer.class)
             .setParameter("id", id)
             .getSingleResult();
     return employer;
@@ -50,11 +50,25 @@ public class EmployerDao {
 
   public void setPopularityPopular(Integer id) {
     sessionFactory.getCurrentSession()
-            .createQuery("update Employer set popularity = 'POPULAR' WHERE id = :id")
+            .createQuery("update Employer set popularity = 'POPULAR' WHERE hh_id = :id")
             .setParameter("id", id)
             .executeUpdate();
   }
 
+  public void setComment(Integer id, String comment) {
+    sessionFactory.getCurrentSession()
+            .createQuery("update Employer set comment = :comment WHERE hh_id = :id")
+            .setParameter("id", id)
+            .setParameter("comment", comment)
+            .executeUpdate();
+  }
+
+  public void delete(Integer id) {
+    sessionFactory.getCurrentSession()
+            .createQuery("delete from Employer WHERE hh_id = :id")
+            .setParameter("id", id)
+            .executeUpdate();
+  }
 
   private Session getSession() {
     try {
@@ -63,4 +77,6 @@ public class EmployerDao {
       return sessionFactory.openSession();
     }
   }
+
+
 }

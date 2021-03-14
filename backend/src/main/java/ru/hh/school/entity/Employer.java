@@ -108,15 +108,15 @@ public class Employer {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Employer that = (Employer) o;
-        return id.equals(that.id) &&
-                name.equals(that.name) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(area, that.area);
+        Employer employer = (Employer) o;
+        return hhId.equals(employer.hhId) &&
+                name.equals(employer.name) &&
+                Objects.equals(description, employer.description) &&
+                Objects.equals(area, employer.area);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, area);
+        return Objects.hash(hhId, name, description, area);
     }
 }

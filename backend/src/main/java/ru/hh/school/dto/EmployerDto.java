@@ -7,16 +7,14 @@ import java.util.List;
 public class EmployerDto {
 
     List<Employer> employerList;
-    Integer pages;
     Integer per_page;
     Integer page;
 
     public EmployerDto() {
     }
 
-    public EmployerDto(List<Employer> employerList, Integer pages, Integer per_page, Integer page) {
+    public EmployerDto(List<Employer> employerList, Integer per_page, Integer page) {
         this.employerList = employerList;
-        this.pages = pages;
         this.per_page = per_page;
         this.page = page;
     }
@@ -27,14 +25,6 @@ public class EmployerDto {
 
     public void setEmployerList(List<Employer> employerList) {
         this.employerList = employerList;
-    }
-
-    public Integer getPages() {
-        return pages;
-    }
-
-    public void setPages(Integer pages) {
-        this.pages = pages;
     }
 
     public Integer getPer_page() {
