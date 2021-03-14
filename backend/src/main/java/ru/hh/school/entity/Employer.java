@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Employer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "hh_id")
     private Integer hhId;
@@ -26,8 +26,10 @@ public class Employer {
 
     String comment;
     LocalDate date_create;
-    @Embedded
+
+    @Enumerated(EnumType.STRING)
     Popularity popularity;
+
     Integer views_count;
 
     public String getComment() {
@@ -62,11 +64,11 @@ public class Employer {
         this.views_count = views_count;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

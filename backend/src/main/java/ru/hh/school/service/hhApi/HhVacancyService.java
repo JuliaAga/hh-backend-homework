@@ -3,9 +3,7 @@ package ru.hh.school.service.hhApi;
 import org.springframework.stereotype.Service;
 import ru.hh.nab.common.properties.FileSettings;
 import ru.hh.school.HhException;
-import ru.hh.school.dto.hhResponse.EmployerPageResponseDto;
-import ru.hh.school.dto.hhResponse.EmployerResponseDto;
-import ru.hh.school.dto.hhResponse.VacancyPageResponseDto;
+import ru.hh.school.dto.hhResponse.VacanciesPageResponseDto;
 import ru.hh.school.dto.hhResponse.VacancyResponseDto;
 
 import javax.ws.rs.client.Client;
@@ -34,7 +32,7 @@ public class HhVacancyService {
 
     }
 
-    public VacancyPageResponseDto getAll(Integer page, Integer per_page, String query) {
+    public VacanciesPageResponseDto getAll(Integer page, Integer per_page, String query) {
 
 
         StringBuffer url = new StringBuffer();
@@ -51,7 +49,7 @@ public class HhVacancyService {
         Response response = client.target(url.toString()).request().get();
         int status = response.getStatus();
         if (status == 200) {
-            VacancyPageResponseDto entities= response.readEntity(VacancyPageResponseDto.class);
+            VacanciesPageResponseDto entities= response.readEntity(VacanciesPageResponseDto.class);
             return entities;
         } else
             throw new HhException(String.valueOf(status));

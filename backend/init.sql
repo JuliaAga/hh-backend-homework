@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS fav_employers (
 
 	comment TEXT,
 	date_create TIMESTAMP NOT NULL,
-	popularity POPULARITY,
+	popularity VARCHAR(10),
 	views_count INTEGER DEFAULT 0,
 	foreign key (area) references area(id)
 );
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS fav_vacancies (
 	salary INTEGER NOT NULL,
 	comment TEXT,
 	date_create TIMESTAMP NOT NULL,
-	popularity POPULARITY,
+	popularity VARCHAR(10),
 	views_count INTEGER DEFAULT 0,
 	employer BIGINT NOT NULL,
 

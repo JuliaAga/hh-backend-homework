@@ -3,7 +3,7 @@ package ru.hh.school.service.hhApi;
 import org.springframework.stereotype.Service;
 import ru.hh.nab.common.properties.FileSettings;
 import ru.hh.school.HhException;
-import ru.hh.school.dto.hhResponse.EmployerPageResponseDto;
+import ru.hh.school.dto.hhResponse.EmployersPageResponseDto;
 import ru.hh.school.dto.hhResponse.EmployerResponseDto;
 
 import javax.ws.rs.client.Client;
@@ -32,7 +32,7 @@ public class HhEmployerService {
 
     }
 
-    public EmployerPageResponseDto getAll(Integer page, Integer per_page, String query) {
+    public EmployersPageResponseDto getAll(Integer page, Integer per_page, String query) {
 
 
         StringBuffer url = new StringBuffer();
@@ -49,7 +49,7 @@ public class HhEmployerService {
         Response response = client.target(url.toString()).request().get();
         int status = response.getStatus();
         if (status == 200) {
-            EmployerPageResponseDto entities= response.readEntity(EmployerPageResponseDto.class);
+            EmployersPageResponseDto entities= response.readEntity(EmployersPageResponseDto.class);
             return entities;
         } else
             throw new HhException(String.valueOf(status));

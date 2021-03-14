@@ -3,6 +3,7 @@ package ru.hh.school.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hh.nab.common.properties.FileSettings;
 import ru.hh.school.dao.AreaDao;
 import ru.hh.school.dao.EmployerDao;
 import ru.hh.school.dto.hhResponse.EmployerResponseDto;
@@ -21,12 +22,17 @@ public class EmployerService {
     EmployerDao employerDao;
     HhEmployerService hhEmployerService;
     AreaDao areaDao;
+    FileSettings fileSettings;
+    Integer limitOfView;
 
     @Autowired
-    public EmployerService(EmployerDao employerDao, HhEmployerService hhEmployerService, AreaDao areaDao) {
+    public EmployerService(EmployerDao employerDao, HhEmployerService hhEmployerService,
+                           AreaDao areaDao, FileSettings fileSettings) {
         this.employerDao = employerDao;
         this.hhEmployerService = hhEmployerService;
         this.areaDao = areaDao;
+        this.fileSettings = fileSettings;
+        limitOfView = fileSettings.getInteger("hh.api.views.limit");
     }
 
     @Transactional
@@ -36,13 +42,23 @@ public class EmployerService {
 
     @Transactional
     public List<Employer> getAll(Integer page, Integer per_page) {
-        return employerDao.getAll(page, per_page);
+        List<Employer> employerList = employerDao.getAll(page, per_page);
+        employerList.forEach(empl -> {
+            increaseCounterOfView(empl);
+            if (empl.getViews_count() + 1 == limitOfView)
+                setPopularityPopular(empl);
+        });
+        return employerList;
     }
 
-    //TODO
     @Transactional
-    public void IncreaseCounterOfView(List<Employer> employers) {
+    public void increaseCounterOfView(Employer employer) {
+        employerDao.increaseCounterOfView(employer.getId());
+    }
 
+    @Transactional
+    public void setPopularityPopular(Employer employer) {
+        employerDao.setPopularityPopular(employer.getId());
     }
 
     //TODO

@@ -5,16 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EmployerPageResponseDto {
+public class EmployersPageResponseDto {
     List<EmplDto> items;
     Integer pages;
     Integer per_page;
     Integer page;
 
-    public EmployerPageResponseDto() {
+    public EmployersPageResponseDto() {
     }
 
-    public EmployerPageResponseDto(List<EmplDto> items, Integer pages, Integer per_page, Integer page) {
+    public EmployersPageResponseDto(List<EmplDto> items, Integer pages, Integer per_page, Integer page) {
         this.items = items;
         this.pages = pages;
         this.per_page = per_page;

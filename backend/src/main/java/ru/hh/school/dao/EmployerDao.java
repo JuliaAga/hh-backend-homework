@@ -40,6 +40,21 @@ public class EmployerDao {
     return employer;
   }
 
+  public void increaseCounterOfView(Integer id) {
+    sessionFactory.getCurrentSession()
+            .createQuery("update Employer set views_count = views_count + 1 WHERE id = :id")
+            .setParameter("id", id)
+            .executeUpdate();
+
+  }
+
+  public void setPopularityPopular(Integer id) {
+    sessionFactory.getCurrentSession()
+            .createQuery("update Employer set popularity = 'POPULAR' WHERE id = :id")
+            .setParameter("id", id)
+            .executeUpdate();
+  }
+
 
   private Session getSession() {
     try {
