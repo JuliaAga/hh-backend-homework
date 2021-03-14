@@ -122,8 +122,4 @@ public class EmployerService {
         employerDao.delete(id);
     }
 
-  /*  @Transactional
-    public void delete(Long id) {
-        genericDao.delete(id);
-    }*/
 }

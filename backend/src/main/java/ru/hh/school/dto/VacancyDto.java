@@ -1,30 +1,31 @@
 package ru.hh.school.dto;
 
 import ru.hh.school.entity.Employer;
+import ru.hh.school.entity.Vacancy;
 
 import java.util.List;
 
-public class EmployerDto {
+public class VacancyDto {
 
-    List<Employer> employers;
+    List<Vacancy> vacancies;
     Integer per_page;
     Integer page;
 
-    public EmployerDto() {
+    public VacancyDto() {
     }
 
-    public EmployerDto(List<Employer> employers, Integer per_page, Integer page) {
-        this.employers = employers;
+    public VacancyDto(List<Vacancy> vacancies, Integer per_page, Integer page) {
+        this.vacancies = vacancies;
         this.per_page = per_page;
         this.page = page;
     }
 
-    public List<Employer> getEmployers() {
-        return employers;
+    public List<Vacancy> getVacancies() {
+        return vacancies;
     }
 
-    public void setEmployers(List<Employer> employers) {
-        this.employers = employers;
+    public void setVacancies(List<Vacancy> vacancies) {
+        this.vacancies = vacancies;
     }
 
     public Integer getPer_page() {

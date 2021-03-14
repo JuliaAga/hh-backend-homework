@@ -1,6 +1,7 @@
 package ru.hh.school.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @javax.persistence.Entity
 @Table(name = "salary")
@@ -54,5 +55,22 @@ public class Salary {
 
     public void setGross(Boolean gross) {
         this.gross = gross;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Salary salary = (Salary) o;
+        return id.equals(salary.id) &&
+                Objects.equals(to, salary.to) &&
+                Objects.equals(from, salary.from) &&
+                Objects.equals(currency, salary.currency) &&
+                Objects.equals(gross, salary.gross);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, to, from, currency, gross);
     }
 }

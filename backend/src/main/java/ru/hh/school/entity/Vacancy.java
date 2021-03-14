@@ -1,7 +1,7 @@
 package ru.hh.school.entity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @javax.persistence.Entity
@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Vacancy {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  protected Long id;
+  protected Integer id;
 
   @Column(name = "hh_id")
   private Long hhId;
@@ -29,7 +29,7 @@ public class Vacancy {
   private Salary salary;
 
   String comment;
-  LocalDateTime date_create;
+  LocalDate date_create;
   Popularity popularity;
   Integer views_count;
 
@@ -41,11 +41,11 @@ public class Vacancy {
     this.comment = comment;
   }
 
-  public LocalDateTime getDate_create() {
+  public LocalDate getDate_create() {
     return date_create;
   }
 
-  public void setDate_create(LocalDateTime date_create) {
+  public void setDate_create(LocalDate date_create) {
     this.date_create = date_create;
   }
 
@@ -65,11 +65,11 @@ public class Vacancy {
     this.views_count = views_count;
   }
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -117,16 +117,16 @@ public class Vacancy {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Vacancy that = (Vacancy) o;
-    return id.equals(that.id) &&
-            name.equals(that.name) &&
-            Objects.equals(salary, that.salary) &&
-            Objects.equals(area, that.area) &&
-            Objects.equals(employer, that.employer);
+    Vacancy vacancy = (Vacancy) o;
+    return hhId.equals(vacancy.hhId) &&
+            name.equals(vacancy.name) &&
+            Objects.equals(area, vacancy.area) &&
+            Objects.equals(employer, vacancy.employer) &&
+            Objects.equals(salary, vacancy.salary);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, salary, area, employer);
+    return Objects.hash(hhId, name, area, employer, salary);
   }
 }

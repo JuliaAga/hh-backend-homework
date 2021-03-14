@@ -1,14 +1,14 @@
 package ru.hh.school.dto.request;
 
 public class VacancyRequestDto {
-    private Long vacancy_id;
+    private Integer vacancy_id;
     private String comment;
 
-    public Long getVacancy_id() {
+    public Integer getVacancy_id() {
         return vacancy_id;
     }
 
-    public void setVacancy_id(Long vacancy_id) {
+    public void setVacancy_id(Integer vacancy_id) {
         this.vacancy_id = vacancy_id;
     }
 

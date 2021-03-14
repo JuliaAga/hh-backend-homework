@@ -1,5 +1,5 @@
 ###from hh
-##employer
+##employers
 GET: http://localhost:8080/employer
 
 GET: http://localhost:8080/employer?query=magazine
@@ -16,6 +16,7 @@ GET: http://localhost:8080/vacancy?query=driver&per_page=1
 GET: http://localhost:8080/vacancy/40918585
 
 ###favorites
+##employers
 GET: http://localhost:8080/favorites/employer
 
 POST - create new one
@@ -36,5 +37,6 @@ curl  --request POST http://localhost:8080/favorites/employer/5257456/refresh
 PUT - delete
 curl --header "Content-Type: application/json" --request DELETE http://localhost:8080/favorites/employer/2392442
 
+##vacancies
 
 
