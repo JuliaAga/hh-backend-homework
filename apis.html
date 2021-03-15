@@ -39,4 +39,21 @@ curl --header "Content-Type: application/json" --request DELETE http://localhost
 
 ##vacancies
 
+GET: http://localhost:8080/favorites/vacancy
+
+POST - create new one
+curl --header "Content-Type: application/json" --data "{\"vacancy_id\":43035110,\"comment\":\"test\"}" http://localhost:8080/favorites/vacancy
+
+4095490
+43035110
+43018148
+
+PUT - update comment
+curl --header "Content-Type: application/json" --request PUT --data "change comment" http://localhost:8080/favorites/vacancy/43018148
+
+POST - refresh
+curl  --request POST http://localhost:8080/favorites/vacancy/4095490/refresh
+
+PUT - delete
+curl --header "Content-Type: application/json" --request DELETE http://localhost:8080/favorites/vacancy/4095490
 

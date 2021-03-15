@@ -4,7 +4,7 @@ package ru.hh.school.dto.hhResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class EmplDto {
+public class EmplDto {
     private Integer id;
     private String name;
 

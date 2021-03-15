@@ -12,15 +12,15 @@ public class Vacancy {
   protected Integer id;
 
   @Column(name = "hh_id")
-  private Long hhId;
+  private Integer hhId;
 
   private String name;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne()
   @JoinColumn(name = "area")
   private Area area;
 
-  @ManyToOne(fetch=FetchType.LAZY)
+  @ManyToOne()
   @JoinColumn(name="employer")
   private Employer employer;
 
@@ -97,11 +97,11 @@ public class Vacancy {
     this.employer = employer;
   }
 
-  public Long getHhId() {
+  public Integer getHhId() {
     return hhId;
   }
 
-  public void setHhId(Long hhId) {
+  public void setHhId(Integer hhId) {
     this.hhId = hhId;
   }
 

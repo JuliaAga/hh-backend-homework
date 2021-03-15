@@ -57,6 +57,16 @@ public class Salary {
         this.gross = gross;
     }
 
+    public Salary(Integer to, Integer from, String currency, Boolean gross) {
+        this.to = to;
+        this.from = from;
+        this.currency = currency;
+        this.gross = gross;
+    }
+
+    public Salary() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

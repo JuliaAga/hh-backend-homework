@@ -5,14 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hh.nab.common.properties.FileSettings;
 import ru.hh.school.dao.AreaDao;
+import ru.hh.school.dao.SalaryDao;
 import ru.hh.school.dao.VacancyDao;
 import ru.hh.school.dto.VacancyDto;
+import ru.hh.school.dto.hhResponse.EmplDto;
 import ru.hh.school.dto.hhResponse.VacancyResponseDto;
+import ru.hh.school.dto.request.EmployerRequestDto;
 import ru.hh.school.dto.request.VacancyRequestDto;
-import ru.hh.school.entity.Area;
-import ru.hh.school.entity.Vacancy;
-import ru.hh.school.entity.Popularity;
+import ru.hh.school.entity.*;
 import ru.hh.school.mappers.AreaMapper;
+import ru.hh.school.mappers.SalaryMapper;
 import ru.hh.school.service.hhApi.HhVacancyService;
 
 
@@ -23,17 +25,22 @@ import java.util.List;
 public class VacancyService {
     VacancyDao vacancyDao;
     HhVacancyService hhVacancyService;
+    EmployerService employerService;
     AreaDao areaDao;
     FileSettings fileSettings;
     Integer limitOfView;
+    SalaryDao salaryDao;
 
     @Autowired
     public VacancyService(VacancyDao vacancyDao, HhVacancyService hhVacancyService,
-                          AreaDao areaDao, FileSettings fileSettings) {
+                          AreaDao areaDao, FileSettings fileSettings,
+                          EmployerService employerService, SalaryDao salaryDao) {
         this.vacancyDao = vacancyDao;
         this.hhVacancyService = hhVacancyService;
         this.areaDao = areaDao;
         this.fileSettings = fileSettings;
+        this.employerService = employerService;
+        this.salaryDao = salaryDao;
         limitOfView = fileSettings.getInteger("hh.api.views.limit");
     }
 
@@ -51,6 +58,11 @@ public class VacancyService {
             if (vac.getViews_count() + 1 == limitOfView)
                 //TODO получается если в настройках увеличить границу то кто-то останется незаконно популярным
                 setPopularityPopular(vac);
+            Employer empl = vac.getEmployer();
+            //todo this is wrong decision
+            employerService.increaseCounterOfView(empl);
+            if (empl.getViews_count() + 1 == limitOfView)
+                employerService.setPopularityPopular(empl);
         });
         return new VacancyDto(vacancyList, per_page, page);
     }
@@ -74,7 +86,7 @@ public class VacancyService {
         vac.setViews_count(0);
         vac.setDate_create(LocalDate.now());
         vac.setPopularity(Popularity.REGULAR);
-        //TODO добавить сохранение employer
+        salaryDao.saveOrUpdate(vac.getSalary());
         areaDao.saveOrUpdate(vac.getArea());
         return vacancyDao.save(vac);
     }
@@ -86,13 +98,13 @@ public class VacancyService {
 
         Vacancy vacDb = getByHhId(id);
 
-        if (!vacHH.equals(vacDb)){
+        if (!vacHH.equals(vacDb)) {
 
             vacDb.setName(vacHH.getName());
             vacDb.setArea(vacHH.getArea());
             vacDb.setEmployer(vacHH.getEmployer());
             vacDb.setSalary(vacHH.getSalary());
-            //TODO добавить сохранение salary
+            salaryDao.saveOrUpdate(vacHH.getSalary());
             areaDao.saveOrUpdate(vacHH.getArea());
             vacancyDao.save(vacDb);
         }
@@ -100,9 +112,25 @@ public class VacancyService {
     }
 
     public Vacancy getVacancyFromHh(Integer id) {
-        //TODO
+        Vacancy vacancy = new Vacancy();
 
-        return new Vacancy();
+        VacancyResponseDto vacancyResponseDto = hhVacancyService.get(id);
+        vacancy.setHhId(vacancyResponseDto.getId());
+        vacancy.setName(vacancyResponseDto.getName());
+
+        Area area = AreaMapper.areaDtoToArea(vacancyResponseDto.getArea());
+        vacancy.setArea(area);
+
+        EmployerRequestDto empl = new EmployerRequestDto();
+        empl.setComment("added because vacancy added");
+        empl.setEmployer_id(vacancyResponseDto.getEmployer().getId());
+        Employer employer = employerService.save(empl);
+        vacancy.setEmployer(employer);
+
+        Salary salary = SalaryMapper.salaryDtoToSalary(vacancyResponseDto.getSalary());
+        vacancy.setSalary(salary);
+
+        return vacancy;
     }
 
 
