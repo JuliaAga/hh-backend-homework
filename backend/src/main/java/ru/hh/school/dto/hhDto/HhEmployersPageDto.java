@@ -1,31 +1,31 @@
-package ru.hh.school.dto.hhResponse;
+package ru.hh.school.dto.hhDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EmployersPageResponseDto {
-    List<EmplDto> items;
+public class HhEmployersPageDto {
+    List<HhEmplDto> items;
     Integer pages;
     Integer per_page;
     Integer page;
 
-    public EmployersPageResponseDto() {
+    public HhEmployersPageDto() {
     }
 
-    public EmployersPageResponseDto(List<EmplDto> items, Integer pages, Integer per_page, Integer page) {
+    public HhEmployersPageDto(List<HhEmplDto> items, Integer pages, Integer per_page, Integer page) {
         this.items = items;
         this.pages = pages;
         this.per_page = per_page;
         this.page = page;
     }
 
-    public List<EmplDto> getItems() {
+    public List<HhEmplDto> getItems() {
         return items;
     }
 
-    public void setItems(List<EmplDto> items) {
+    public void setItems(List<HhEmplDto> items) {
         this.items = items;
     }
 
@@ -53,6 +53,3 @@ public class EmployersPageResponseDto {
         this.page = page;
     }
 }
-
-
-

@@ -1,19 +1,18 @@
-package ru.hh.school.dto.hhResponse;
-
+package ru.hh.school.dto.hhDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EmplDto {
+public class HhEmplDto {
     private Integer id;
     private String name;
 
-    public EmplDto(Integer id, String name) {
+    public HhEmplDto(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public EmplDto() {
+    public HhEmplDto() {
     }
 
     public Integer getId() {

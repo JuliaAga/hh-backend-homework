@@ -1,28 +1,23 @@
-package ru.hh.school.dto.hhResponse;
+package ru.hh.school.dto.hhDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ru.hh.school.dto.AreaDto;
-import ru.hh.school.dto.SalaryDto;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VacancyResponseDto {
+public class HhEmployerDto {
     private Integer id;
     private String name;
     private String description;
     private AreaDto area;
-    private EmplDto employer;
-    private SalaryDto salary;
 
-    public VacancyResponseDto() {
+    public HhEmployerDto() {
     }
 
-    public VacancyResponseDto(Integer id, String name, String description, AreaDto area, EmplDto employer, SalaryDto salary) {
+    public HhEmployerDto(Integer id, String name, String description, AreaDto area) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.area = area;
-        this.employer = employer;
-        this.salary = salary;
     }
 
     public Integer getId() {
@@ -55,21 +50,5 @@ public class VacancyResponseDto {
 
     public void setArea(AreaDto area) {
         this.area = area;
-    }
-
-    public EmplDto getEmployer() {
-        return employer;
-    }
-
-    public void setEmployer(EmplDto employer) {
-        this.employer = employer;
-    }
-
-    public SalaryDto getSalary() {
-        return salary;
-    }
-
-    public void setSalary(SalaryDto salary) {
-        this.salary = salary;
     }
 }

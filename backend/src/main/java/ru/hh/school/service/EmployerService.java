@@ -7,13 +7,13 @@ import ru.hh.nab.common.properties.FileSettings;
 import ru.hh.school.dao.AreaDao;
 import ru.hh.school.dao.EmployerDao;
 import ru.hh.school.dto.EmployerDto;
-import ru.hh.school.dto.hhResponse.EmployerResponseDto;
+import ru.hh.school.dto.hhDto.HhEmployerDto;
 import ru.hh.school.dto.request.EmployerRequestDto;
 import ru.hh.school.entity.Area;
 import ru.hh.school.entity.Employer;
 import ru.hh.school.entity.Popularity;
 import ru.hh.school.mappers.AreaMapper;
-import ru.hh.school.service.hhApi.HhEmployerService;
+import ru.hh.school.service.hhServices.HhEmployerService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -97,16 +97,16 @@ public class EmployerService {
     }
 
     public Employer getEmployerFromHh(Integer id) {
-        EmployerResponseDto employerResponseDto = hhEmployerService.get(id);
+        HhEmployerDto hhEmployerDto = hhEmployerService.get(id);
 
-        Area area = AreaMapper.areaDtoToArea(employerResponseDto.getArea());
+        Area area = AreaMapper.areaDtoToArea(hhEmployerDto.getArea());
         Employer employer = new Employer();
 
         employer.setHhId(id);
 
         employer.setArea(area);
-        employer.setName(employerResponseDto.getName());
-        employer.setDescription(employerResponseDto.getDescription());
+        employer.setName(hhEmployerDto.getName());
+        employer.setDescription(hhEmployerDto.getDescription());
 
         return employer;
     }

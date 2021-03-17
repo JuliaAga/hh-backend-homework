@@ -8,14 +8,13 @@ import ru.hh.school.dao.AreaDao;
 import ru.hh.school.dao.SalaryDao;
 import ru.hh.school.dao.VacancyDao;
 import ru.hh.school.dto.VacancyDto;
-import ru.hh.school.dto.hhResponse.EmplDto;
-import ru.hh.school.dto.hhResponse.VacancyResponseDto;
+import ru.hh.school.dto.hhDto.HhVacancyDto;
 import ru.hh.school.dto.request.EmployerRequestDto;
 import ru.hh.school.dto.request.VacancyRequestDto;
 import ru.hh.school.entity.*;
 import ru.hh.school.mappers.AreaMapper;
 import ru.hh.school.mappers.SalaryMapper;
-import ru.hh.school.service.hhApi.HhVacancyService;
+import ru.hh.school.service.hhServices.HhVacancyService;
 
 
 import java.time.LocalDate;
@@ -114,20 +113,20 @@ public class VacancyService {
     public Vacancy getVacancyFromHh(Integer id) {
         Vacancy vacancy = new Vacancy();
 
-        VacancyResponseDto vacancyResponseDto = hhVacancyService.get(id);
-        vacancy.setHhId(vacancyResponseDto.getId());
-        vacancy.setName(vacancyResponseDto.getName());
+        HhVacancyDto hhVacancyDto = hhVacancyService.get(id);
+        vacancy.setHhId(hhVacancyDto.getId());
+        vacancy.setName(hhVacancyDto.getName());
 
-        Area area = AreaMapper.areaDtoToArea(vacancyResponseDto.getArea());
+        Area area = AreaMapper.areaDtoToArea(hhVacancyDto.getArea());
         vacancy.setArea(area);
 
         EmployerRequestDto empl = new EmployerRequestDto();
         empl.setComment("added because vacancy added");
-        empl.setEmployer_id(vacancyResponseDto.getEmployer().getId());
+        empl.setEmployer_id(hhVacancyDto.getEmployer().getId());
         Employer employer = employerService.save(empl);
         vacancy.setEmployer(employer);
 
-        Salary salary = SalaryMapper.salaryDtoToSalary(vacancyResponseDto.getSalary());
+        Salary salary = SalaryMapper.salaryDtoToSalary(hhVacancyDto.getSalary());
         vacancy.setSalary(salary);
 
         return vacancy;

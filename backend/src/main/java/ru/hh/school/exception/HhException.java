@@ -1,4 +1,4 @@
-package ru.hh.school;
+package ru.hh.school.exception;
 
 public class HhException extends RuntimeException {
 
