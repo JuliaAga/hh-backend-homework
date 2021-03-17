@@ -4,16 +4,16 @@ import ru.hh.school.entity.Employer;
 
 import java.util.List;
 
-public class EmployerDto {
+public class FavEmployersPageDto {
 
     List<Employer> employers;
     Integer per_page;
     Integer page;
 
-    public EmployerDto() {
+    public FavEmployersPageDto() {
     }
 
-    public EmployerDto(List<Employer> employers, Integer per_page, Integer page) {
+    public FavEmployersPageDto(List<Employer> employers, Integer per_page, Integer page) {
         this.employers = employers;
         this.per_page = per_page;
         this.page = page;

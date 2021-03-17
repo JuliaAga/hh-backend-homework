@@ -1,4 +1,4 @@
-package ru.hh.school.service;
+package ru.hh.school.service.favServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,26 +21,27 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class VacancyService {
+public class FavVacancyService {
     VacancyDao vacancyDao;
     HhVacancyService hhVacancyService;
-    EmployerService employerService;
+    FavEmployerService favEmployerService;
     AreaDao areaDao;
-    FileSettings fileSettings;
     Integer limitOfView;
     SalaryDao salaryDao;
 
     @Autowired
-    public VacancyService(VacancyDao vacancyDao, HhVacancyService hhVacancyService,
-                          AreaDao areaDao, FileSettings fileSettings,
-                          EmployerService employerService, SalaryDao salaryDao) {
+    public FavVacancyService(VacancyDao vacancyDao, HhVacancyService hhVacancyService,
+                             AreaDao areaDao, FileSettings fileSettings,
+                             FavEmployerService favEmployerService, SalaryDao salaryDao) {
         this.vacancyDao = vacancyDao;
         this.hhVacancyService = hhVacancyService;
         this.areaDao = areaDao;
-        this.fileSettings = fileSettings;
-        this.employerService = employerService;
+        this.favEmployerService = favEmployerService;
         this.salaryDao = salaryDao;
         limitOfView = fileSettings.getInteger("hh.api.views.limit");
+        if (limitOfView == null) {
+            limitOfView = 50;
+        }
     }
 
     @Transactional
@@ -59,9 +60,9 @@ public class VacancyService {
                 setPopularityPopular(vac);
             Employer empl = vac.getEmployer();
             //todo this is wrong decision
-            employerService.increaseCounterOfView(empl);
+            favEmployerService.increaseCounterOfView(empl);
             if (empl.getViews_count() + 1 == limitOfView)
-                employerService.setPopularityPopular(empl);
+                favEmployerService.setPopularityPopular(empl);
         });
         return new VacancyDto(vacancyList, per_page, page);
     }
@@ -123,7 +124,7 @@ public class VacancyService {
         EmployerRequestDto empl = new EmployerRequestDto();
         empl.setComment("added because vacancy added");
         empl.setEmployer_id(hhVacancyDto.getEmployer().getId());
-        Employer employer = employerService.save(empl);
+        Employer employer = favEmployerService.save(empl);
         vacancy.setEmployer(employer);
 
         Salary salary = SalaryMapper.salaryDtoToSalary(hhVacancyDto.getSalary());

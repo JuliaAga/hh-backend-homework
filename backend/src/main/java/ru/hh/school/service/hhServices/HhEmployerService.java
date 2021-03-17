@@ -8,7 +8,6 @@ import ru.hh.nab.common.properties.FileSettings;
 import ru.hh.school.exception.HhException;
 import ru.hh.school.dto.hhDto.HhEmployersPageDto;
 import ru.hh.school.dto.hhDto.HhEmployerDto;
-import ru.hh.school.exception.HhExceptionHandler;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;

@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.core.Response;
 import java.util.concurrent.Callable;
 
-public class HhExceptionHandler {
-    private static final Logger logger = LoggerFactory.getLogger(HhExceptionHandler.class);
+public class ExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandler.class);
 
     public static Response handleException(Callable<Response> callable) {
         try {

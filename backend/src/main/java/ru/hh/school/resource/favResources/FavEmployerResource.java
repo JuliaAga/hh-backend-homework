@@ -6,23 +6,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 import ru.hh.school.dto.request.EmployerRequestDto;
 import ru.hh.school.entity.Employer;
-import ru.hh.school.service.EmployerService;
-
+import ru.hh.school.exception.ExceptionHandler;
+import ru.hh.school.service.favServices.FavEmployerService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.util.List;
-
 @Produces(MediaType.APPLICATION_JSON)
 @Controller
 @Path("/favorites")
 public class FavEmployerResource {
-    private final EmployerService employerService;
+    private final FavEmployerService favEmployerService;
 
-    public FavEmployerResource(EmployerService employerService) {
-        this.employerService = employerService;
+    public FavEmployerResource(FavEmployerService favEmployerService) {
+        this.favEmployerService = favEmployerService;
     }
 
     @GET
@@ -30,19 +28,17 @@ public class FavEmployerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getAll(@QueryParam("page") @DefaultValue("0") Integer page,
                            @QueryParam("per_page") @DefaultValue("20") Integer per_page) {
-        return Response.ok(employerService.getAll(page, per_page)).build();
+        return Response.ok(favEmployerService.getAll(page, per_page)).build();
     }
 
     @POST
     @Path("/employer")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(EmployerRequestDto dto) {
-        try {
-            return Response.ok(employerService.save(dto)).build();
-        } catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Operation failed", ex);
-        }
+        return ExceptionHandler.handleException(() -> {
+            Employer empl = favEmployerService.save(dto);
+            return Response.ok(empl).build();
+        });
     }
 
     @PUT
@@ -50,7 +46,7 @@ public class FavEmployerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setComment(@PathParam("id") Integer id, String comment) {
         try {
-            employerService.setComment(id, comment);
+            favEmployerService.setComment(id, comment);
             return Response.ok().build();
         } catch (Exception ex) {
             throw new ResponseStatusException(
@@ -63,7 +59,7 @@ public class FavEmployerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refresh(@PathParam("id") Integer id) {
         try {
-            employerService.refresh(id);
+            favEmployerService.refresh(id);
             return Response.ok().build();
         } catch (Exception ex) {
             throw new ResponseStatusException(
@@ -75,13 +71,10 @@ public class FavEmployerResource {
     @Path("/employer/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") Integer id) {
-        try {
-            employerService.delete(id);
+        return ExceptionHandler.handleException(() -> {
+            favEmployerService.delete(id);
             return Response.ok().build();
-        } catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Operation failed", ex);
-        }
+        });
     }
 
 

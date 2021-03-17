@@ -18,11 +18,10 @@ public class EmployerDao {
 
   public Employer getByHhId(Integer id) {
     Session session = getSession();
-    Employer employer = session
+    return session
             .createQuery("SELECT f FROM Employer f WHERE hh_id = :id", Employer.class)
             .setParameter("id", id)
             .getSingleResult();
-    return employer;
   }
 
   public List<Employer> getAll(Integer page, Integer per_page) {

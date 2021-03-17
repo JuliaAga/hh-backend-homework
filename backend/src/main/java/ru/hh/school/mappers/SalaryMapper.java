@@ -1,8 +1,6 @@
 package ru.hh.school.mappers;
 
-import ru.hh.school.dto.AreaDto;
 import ru.hh.school.dto.SalaryDto;
-import ru.hh.school.entity.Area;
 import ru.hh.school.entity.Salary;
 
 public class SalaryMapper {

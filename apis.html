@@ -22,12 +22,6 @@ GET: http://localhost:8080/favorites/employer
 POST - create new one
 curl --header "Content-Type: application/json" --data "{\"employer_id\":605490,\"comment\":\"test\"}" http://localhost:8080/favorites/employer
 
-36227
-5257456
-4849846
-2392442
-605490
-
 PUT - update comment
 curl --header "Content-Type: application/json" --request PUT --data "change comment" http://localhost:8080/favorites/employer/36227
 
@@ -43,10 +37,6 @@ GET: http://localhost:8080/favorites/vacancy
 
 POST - create new one
 curl --header "Content-Type: application/json" --data "{\"vacancy_id\":43035110,\"comment\":\"test\"}" http://localhost:8080/favorites/vacancy
-
-4095490
-43035110
-43018148
 
 PUT - update comment
 curl --header "Content-Type: application/json" --request PUT --data "change comment" http://localhost:8080/favorites/vacancy/43018148

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 import ru.hh.school.exception.HhException;
 import ru.hh.school.dto.request.VacancyRequestDto;
-import ru.hh.school.service.VacancyService;
+import ru.hh.school.service.favServices.FavVacancyService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -16,10 +16,10 @@ import java.util.concurrent.Callable;
 @Controller
 @Path("/favorites")
 public class FavVacancyResource {
-    private final VacancyService vacancyService;
+    private final FavVacancyService favVacancyService;
 
-    public FavVacancyResource(VacancyService vacancyService) {
-        this.vacancyService = vacancyService;
+    public FavVacancyResource(FavVacancyService favVacancyService) {
+        this.favVacancyService = favVacancyService;
     }
 
     @GET
@@ -27,7 +27,7 @@ public class FavVacancyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getAll(@QueryParam("page") @DefaultValue("0") Integer page,
                            @QueryParam("per_page") @DefaultValue("20") Integer per_page) {
-        return Response.ok(vacancyService.getAll(page, per_page)).build();
+        return Response.ok(favVacancyService.getAll(page, per_page)).build();
     }
 
     @POST
@@ -35,7 +35,7 @@ public class FavVacancyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(VacancyRequestDto dto) {
         try {
-            return Response.ok(vacancyService.save(dto)).build();
+            return Response.ok(favVacancyService.save(dto)).build();
         } catch (Exception ex) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Operation failed", ex);
@@ -47,7 +47,7 @@ public class FavVacancyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setComment(@PathParam("id") Integer id, String comment) {
         try {
-            vacancyService.setComment(id, comment);
+            favVacancyService.setComment(id, comment);
             return Response.ok().build();
         } catch (Exception ex) {
             throw new ResponseStatusException(
@@ -60,7 +60,7 @@ public class FavVacancyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refresh(@PathParam("id") Integer id) {
         try {
-            vacancyService.refresh(id);
+            favVacancyService.refresh(id);
             return Response.ok().build();
         } catch (Exception ex) {
             throw new ResponseStatusException(
@@ -73,7 +73,7 @@ public class FavVacancyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") Integer id) {
        return handleException( () -> {
-           vacancyService.delete(id);
+           favVacancyService.delete(id);
            return Response.ok().build();
        });
     }
