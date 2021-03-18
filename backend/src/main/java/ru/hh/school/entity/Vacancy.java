@@ -21,7 +21,7 @@ public class Vacancy {
   private Area area;
 
   @ManyToOne()
-  @JoinColumn(name="employer")
+  @JoinColumn(name = "employer")
   private Employer employer;
 
   @OneToOne
@@ -29,9 +29,14 @@ public class Vacancy {
   private Salary salary;
 
   String comment;
-  LocalDate date_create;
+
+  @Column(name = "date_create")
+  LocalDate dateCreate;
+
   Popularity popularity;
-  Integer views_count;
+
+  @Column(name = "views_count")
+  Integer viewsCount;
 
   public String getComment() {
     return comment;
@@ -41,12 +46,12 @@ public class Vacancy {
     this.comment = comment;
   }
 
-  public LocalDate getDate_create() {
-    return date_create;
+  public LocalDate getDateCreate() {
+    return dateCreate;
   }
 
-  public void setDate_create(LocalDate date_create) {
-    this.date_create = date_create;
+  public void setDateCreate(LocalDate dateCreate) {
+    this.dateCreate = dateCreate;
   }
 
   public Popularity getPopularity() {
@@ -57,12 +62,12 @@ public class Vacancy {
     this.popularity = popularity;
   }
 
-  public Integer getViews_count() {
-    return views_count;
+  public Integer getViewsCount() {
+    return viewsCount;
   }
 
-  public void setViews_count(Integer views_count) {
-    this.views_count = views_count;
+  public void setViewsCount(Integer viewsCount) {
+    this.viewsCount = viewsCount;
   }
 
   public Integer getId() {

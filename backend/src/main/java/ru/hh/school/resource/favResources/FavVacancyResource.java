@@ -3,6 +3,9 @@ package ru.hh.school.resource.favResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
+import ru.hh.school.entity.Employer;
+import ru.hh.school.entity.Vacancy;
+import ru.hh.school.exception.ExceptionHandler;
 import ru.hh.school.exception.HhException;
 import ru.hh.school.dto.request.VacancyRequestDto;
 import ru.hh.school.service.favServices.FavVacancyService;
@@ -34,12 +37,10 @@ public class FavVacancyResource {
     @Path("/vacancy")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(VacancyRequestDto dto) {
-        try {
-            return Response.ok(favVacancyService.save(dto)).build();
-        } catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Operation failed", ex);
-        }
+        return ExceptionHandler.handleException(() -> {
+            Vacancy vac = favVacancyService.save(dto);
+            return Response.ok(vac).build();
+        });
     }
 
     @PUT
@@ -72,25 +73,9 @@ public class FavVacancyResource {
     @Path("/vacancy/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") Integer id) {
-       return handleException( () -> {
-           favVacancyService.delete(id);
-           return Response.ok().build();
-       });
+        return ExceptionHandler.handleException(() -> {
+            favVacancyService.delete(id);
+            return Response.ok().build();
+        });
     }
-
-    private Response handleException(Callable<Response> callable) {
-        try {
-            return callable.call();
-        }
-        catch (HhException hex) {
-            return Response.status(Response.Status.fromStatusCode(Integer.parseInt(hex.getMessage()))).build();
-        }
-        catch (Exception ex)
-        {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-
-
-
 }

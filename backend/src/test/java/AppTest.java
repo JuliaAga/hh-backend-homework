@@ -21,10 +21,6 @@ public class AppTest extends NabTestBase {
 
   @Test
   public void createUserAndCompanyTest() {
-    Response response = createRequest("/")
-            .buildGet()
-            .invoke();
 
-    //assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
   }
 }

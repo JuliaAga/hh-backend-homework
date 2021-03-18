@@ -1,5 +1,7 @@
 package ru.hh.school.service.favServices;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +19,14 @@ import ru.hh.school.mappers.SalaryMapper;
 import ru.hh.school.service.hhServices.HhVacancyService;
 
 
+import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class FavVacancyService {
+    private static final Logger logger = LoggerFactory.getLogger(FavVacancyService.class);
+
     VacancyDao vacancyDao;
     HhVacancyService hhVacancyService;
     FavEmployerService favEmployerService;
@@ -49,20 +54,12 @@ public class FavVacancyService {
         return vacancyDao.getByHhId(id);
     }
 
-
     @Transactional
     public VacancyDto getAll(Integer page, Integer per_page) {
         List<Vacancy> vacancyList = vacancyDao.getAll(page, per_page);
         vacancyList.forEach(vac -> {
             increaseCounterOfView(vac);
-            if (vac.getViews_count() + 1 == limitOfView)
-                //TODO получается если в настройках увеличить границу то кто-то останется незаконно популярным
-                setPopularityPopular(vac);
-            Employer empl = vac.getEmployer();
-            //todo this is wrong decision
-            favEmployerService.increaseCounterOfView(empl);
-            if (empl.getViews_count() + 1 == limitOfView)
-                favEmployerService.setPopularityPopular(empl);
+            favEmployerService.increaseCounterOfView(vac.getEmployer());
         });
         return new VacancyDto(vacancyList, per_page, page);
     }
@@ -70,6 +67,8 @@ public class FavVacancyService {
     @Transactional
     public void increaseCounterOfView(Vacancy vacancy) {
         vacancyDao.increaseCounterOfView(vacancy.getId());
+        if (vacancy.getViewsCount() + 1 == limitOfView)
+            setPopularityPopular(vacancy);
     }
 
     @Transactional
@@ -78,17 +77,25 @@ public class FavVacancyService {
     }
 
     @Transactional
-    public Vacancy save(VacancyRequestDto dto) {
-
-        Vacancy vac = getVacancyFromHh(dto.getVacancy_id());
-
-        vac.setComment(dto.getComment());
-        vac.setViews_count(0);
-        vac.setDate_create(LocalDate.now());
-        vac.setPopularity(Popularity.REGULAR);
+    public Vacancy saveVacancyWithInnerObjects(Vacancy vac) {
         salaryDao.saveOrUpdate(vac.getSalary());
         areaDao.saveOrUpdate(vac.getArea());
         return vacancyDao.save(vac);
+    }
+
+    @Transactional
+    public Vacancy save(VacancyRequestDto dto) {
+
+        Vacancy vac = getVacancyFromHh(dto.getVacancy_id());
+        return saveVacancyWithInnerObjects(addDefaultFields(vac, dto.getComment()));
+    }
+
+    public Vacancy addDefaultFields(Vacancy vac, String comment) {
+        vac.setComment(comment);
+        vac.setViewsCount(0);
+        vac.setDateCreate(LocalDate.now());
+        vac.setPopularity(Popularity.REGULAR);
+        return vac;
     }
 
     @Transactional
@@ -96,17 +103,22 @@ public class FavVacancyService {
 
         Vacancy vacHH = getVacancyFromHh(id);
 
-        Vacancy vacDb = getByHhId(id);
+        Vacancy vacDb;
+        try {
+            vacDb = getByHhId(id);
+            if (!vacHH.equals(vacDb)) {
 
-        if (!vacHH.equals(vacDb)) {
-
-            vacDb.setName(vacHH.getName());
-            vacDb.setArea(vacHH.getArea());
-            vacDb.setEmployer(vacHH.getEmployer());
-            vacDb.setSalary(vacHH.getSalary());
-            salaryDao.saveOrUpdate(vacHH.getSalary());
-            areaDao.saveOrUpdate(vacHH.getArea());
-            vacancyDao.save(vacDb);
+                vacDb.setName(vacHH.getName());
+                vacDb.setArea(vacHH.getArea());
+                vacDb.setEmployer(vacHH.getEmployer());
+                vacDb.setSalary(vacHH.getSalary());
+                salaryDao.saveOrUpdate(vacHH.getSalary());
+                areaDao.saveOrUpdate(vacHH.getArea());
+                vacancyDao.save(vacDb);
+            }
+        } catch (NoResultException nre) {
+            vacHH = addDefaultFields(vacHH, "Added when try refresh not existing in db");
+            saveVacancyWithInnerObjects(vacHH);
         }
 
     }
@@ -125,6 +137,7 @@ public class FavVacancyService {
         empl.setComment("added because vacancy added");
         empl.setEmployer_id(hhVacancyDto.getEmployer().getId());
         Employer employer = favEmployerService.save(empl);
+
         vacancy.setEmployer(employer);
 
         Salary salary = SalaryMapper.salaryDtoToSalary(hhVacancyDto.getSalary());

@@ -52,9 +52,6 @@ public class FavEmployerService {
         List<Employer> employerList = employerDao.getAll(page, per_page);
         employerList.forEach(empl -> {
             increaseCounterOfView(empl);
-            if (empl.getViews_count() + 1 == limitOfView)
-                //TODO получается если в настройках изменить границу то кто-то останется незаконно популярным (или обиженным)
-                setPopularityPopular(empl);
         });
         return new FavEmployersPageDto(employerList, per_page, page);
     }
@@ -62,6 +59,8 @@ public class FavEmployerService {
     @Transactional
     public void increaseCounterOfView(Employer employer) {
         employerDao.increaseCounterOfView(employer.getId());
+        if (employer.getViewsCount() + 1 == limitOfView)
+            setPopularityPopular(employer);
     }
 
     @Transactional
@@ -91,13 +90,16 @@ public class FavEmployerService {
     //todo не нужна бд, но дергает такие методы - почему не работает без transactional?
     @Transactional
     public Employer save(EmployerRequestDto dto) {
-
         Employer empl = getEmployerFromHh(dto.getEmployer_id());
-        empl.setComment(dto.getComment());
-        empl.setViews_count(0);
-        empl.setDate_create(LocalDate.now());
+        return saveNewEmployerWithArea(addDefaultFields(empl, dto.getComment()));
+    }
+
+    public Employer addDefaultFields(Employer empl, String comment) {
+        empl.setComment(comment);
+        empl.setViewsCount(0);
+        empl.setDateCreate(LocalDate.now());
         empl.setPopularity(Popularity.REGULAR);
-        return saveNewEmployerWithArea(empl);
+        return empl;
     }
 
     @Transactional
@@ -116,6 +118,7 @@ public class FavEmployerService {
                 saveNewEmployerWithArea(emplDb);
             }
         } catch (NoResultException nre) {
+            emplHH = addDefaultFields(emplHH, "Added when try refresh not existing in db");
             saveNewEmployerWithArea(emplHH);
         }
 

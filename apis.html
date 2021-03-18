@@ -36,10 +36,10 @@ curl --header "Content-Type: application/json" --request DELETE http://localhost
 GET: http://localhost:8080/favorites/vacancy
 
 POST - create new one
-curl --header "Content-Type: application/json" --data "{\"vacancy_id\":43035110,\"comment\":\"test\"}" http://localhost:8080/favorites/vacancy
+curl --header "Content-Type: application/json" --data "{\"vacancy_id\":4095490,\"comment\":\"test\"}" http://localhost:8080/favorites/vacancy
 
 PUT - update comment
-curl --header "Content-Type: application/json" --request PUT --data "change comment" http://localhost:8080/favorites/vacancy/43018148
+curl --header "Content-Type: application/json" --request PUT --data "change comment" http://localhost:8080/favorites/vacancy/4095490
 
 POST - refresh
 curl  --request POST http://localhost:8080/favorites/vacancy/4095490/refresh
